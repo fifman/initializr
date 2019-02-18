@@ -1,0 +1,34 @@
+archetype:
+  url: https://gogs.msplat.io/fengyc/testarch
+  path: /var/test/testarch
+  propFile: properties.yml
+  metaDir: config
+  conf: config.yml
+
+
+local:
+  gcp:
+    version: 1.0.0.M3
+
+logging:
+  level:
+    org.springframework.core.env: warn
+    org.springframework.jndi: warn
+
+server:
+  compression:
+    enabled: true
+    mime-types: application/json,text/css,text/html
+    min-response-size: 2048
+
+spring:
+  jackson:
+    serialization:
+     write-dates-as-timestamps: false
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+  profiles:
+    active: initializr

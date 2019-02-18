@@ -1,0 +1,25 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.2.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.szhome.platform'
+version = '1.0.0'
+sourceCompatibility = '1.8'
+
+repositories {
+    maven { url "http://168.168.100.12:8081/nexus/content/groups/public" }
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+	mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.spring.initializr:initializr-web:0.7.0.RELEASE'
+    implementation 	'org.eclipse.jgit:org.eclipse.jgit:5.2.1.201812262042-r'
+    implementation 	'org.yaml:snakeyaml'
+}

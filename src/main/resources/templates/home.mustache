@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>平台项目初始化</title>
+    <link href="//fonts.googleapis.com/css?family=Varela+Round|Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{#linkTo}}/css/bootstrap.min.css{{/linkTo}}"/>
+    <link rel="stylesheet" href="{{#linkTo}}/css/bootstrap-theme.min.css{{/linkTo}}"/>
+    <link rel="stylesheet" href="{{#linkTo}}/css/spring.css{{/linkTo}}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{#trackingCode}}
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KZM7GF6');</script>
+    {{/trackingCode}}
+</head>
+<body>
+<form id="form" action="/starter.zip" method="get" role="form">
+    <div class="container-fluid">
+        <div class="row start-header">
+            <div class="container">
+                <h1>平台项目初始化 <small>初始化您的应用</small></h1>
+            </div>
+        </div>
+        <div class="container start-main">
+            <div class="row form-inline text-center">
+                <div class="form-group project-choice">
+                    <h2>
+                        <span class="rwd-line">
+                        <label for="type">创建一个</label>
+                        <select tabindex="1" class="form-control" id="type" name="type">
+                            {{#types.content}}
+                            <option data-action="{{action}}" value="{{id}}" {{#default}}
+                                    selected{{/default}}>{{name}}</option>
+                            {{/types.content}}
+                        </select>
+                        <label for="language">基于</label>
+                        <select tabindex="2" class="form-control" name="language" id="language">
+                            {{#languages.content}}
+                            <option value="{{id}}" {{#default}} selected{{/default}}>{{name}}</option>
+                            {{/languages.content}}
+                        </select>
+                        </span>
+                        <span class="rwd-line">
+                        <label for="bootVersion">以及 Spring Boot</label>
+                        <select tabindex="3" class="form-control" name="bootVersion" id="bootVersion">
+                            {{#bootVersions.content}}
+                            <option value="{{id}}" {{#default}} selected{{/default}}>{{name}}</option>
+                            {{/bootVersions.content}}
+                        </select>
+                    </span>
+                    </h2>
+                </div>
+            </div>
+
+            <input id="baseDir" name="baseDir" type="hidden" value="{{artifactId.content}}">
+
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h2>项目配置</h2>
+
+                    <p>包坐标</p>
+
+                    <div class="form-group groupid-form-group">
+                        <label for="groupId" class="control-label">包组名（group）</label>
+                        <input tabindex="4" id="groupId" class="form-control" type="text" value="{{groupId.content}}"
+                               name="groupId">
+                    </div>
+                    <div class="form-group artifactid-form-group">
+                        <label for="artifactId" class="control-label">包名（artifact）</label>
+                        <input tabindex="5" id="artifactId" class="form-control" type="text"
+                               value="{{artifactId.content}}"
+                               name="artifactId">
+                    </div>
+                    <div class="form-group full hidden name-form-group">
+                        <label for="name" class="control-label">项目名（根目录）</label>
+                        <input tabindex="6" id="name" class="form-control" type="text" value="{{name.content}}"
+                               name="name">
+                    </div>
+                    <div class="form-group full hidden description-form-group">
+                        <label for="description" class="control-label">项目描述</label>
+                        <input tabindex="7" id="description" class="form-control" type="text"
+                               value="{{description.content}}" name="description">
+                    </div>
+                    <div class="form-group full hidden packagename-form-group">
+                        <label for="packageName" class="control-label">项目根包路径（package）</label>
+                        <input tabindex="8" id="packageName" class="form-control" type="text"
+                               value="{{packageName.content}}" placeholder="项目Java源码的根包路径，所有源码都会在此包内。"
+                               name="packageName">
+                    </div>
+                    <div class="form-group full hidden packaging-form-group">
+                        <label for="packaging" class="control-label">项目打包方式</label>
+                        <select tabindex="9" class="form-control" id="packaging" name="packaging">
+                            {{#packagings.content}}
+                            <option value="{{id}}"{{#default}} selected{{/default}}>{{name}}</option>
+                            {{/packagings.content}}
+                        </select>
+                    </div>
+                    <div class="form-group full hidden javaversion-form-group">
+                        <label for="javaVersion" class="control-label">Java版本</label>
+                        <select tabindex="10" class="form-control" name="javaVersion" id="javaVersion">
+                            {{#javaVersions.content}}
+                            <option value="{{id}}"{{#default}} selected{{/default}}>{{name}}</option>
+                            {{/javaVersions.content}}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <h2>项目骨架</h2>
+
+                    <p>选择项目骨架</p>
+
+                    <div class="form-group">
+                        <label for="autocomplete1" class="control-label">查询项目骨架</label>
+                        <input tabindex="11" id="autocomplete1" class="form-control" type="text"
+                               placeholder="Webapp, Microservice, RunnerJar ..."
+                               name="autocomplete1">
+                    </div>
+                    <div class="form-group">
+                        <label for="starters1" class="control-label">已选择的骨架列表</label>
+                        <div id="starters1">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <h2>项目依赖</h2>
+
+                    <p>添加项目依赖到应用中</p>
+
+                    <div class="form-group">
+                        <label for="autocomplete" class="control-label">查询项目依赖</label>
+                        <input tabindex="12" id="autocomplete" class="form-control" type="text"
+                               placeholder="Web, Security, JPA, Actuator, Devtools..."
+                               name="autocomplete">
+                    </div>
+                    <div class="form-group">
+                        <label for="starters" class="control-label">已选项目依赖</label>
+                        <div id="starters">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row hidden tosimpleversion">
+                <p>选项太多？请点击：<a href="#">切换回简单模式</a></p>
+            </div>
+            <div class="row">
+                <p class="text-center">
+                    <button tabindex="12" name="generate-project" type="submit" class="btn btn-lg btn-primary"
+                            role="button">
+                        创建项目
+                    </button>
+                </p>
+            </div>
+            <div class="row tofullversion">
+                <p>更多选项请点击：<a href="#">切换成详细选项模式</a></p>
+            </div>
+            <div class="row">
+                <div id="dependencies" class="full hidden">
+                    {{#dependencies.content}}
+                    <div class="form-group col-sm-6">
+                        <h3>{{name}}</h3>
+                        {{#content}}
+                        <div class="checkbox" data-range="{{#versionRange}}{{versionRange}}{{/versionRange}}">
+                            <label>
+                                <input tabindex="13" type="checkbox" name="style" value="{{id}}">{{name}}
+                                <p class="help-block">{{#description}}{{.}}{{/description}}</p>
+                                {{#versionRequirement}}
+                                <p class="help-block version-requirement">requires Spring Boot {{.}}</p>
+                                {{/versionRequirement}}
+                            </label>
+                        </div>
+                        {{/content}}
+                    </div>
+                   {{/dependencies.content}}
+                </div>
+            </div>
+            <div class="row full hidden">
+                <p class="text-center">
+                    <button tabindex="14" name="generate-project" type="submit" class="btn btn-lg btn-primary"
+                            role="button">
+                        Generate Project
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+</form>
+<footer>
+    <div class="container">
+        <p>start.spring.io is powered by <a href="https://github.com/spring-io/initializr/">Spring Initializr</a>
+            and <a href="https://run.pivotal.io">Pivotal Web Services</a></p>
+    </div>
+</footer>
+<script src="{{#linkTo}}/js/jquery-3.1.1.min.js{{/linkTo}}"></script>
+<script src="{{#linkTo}}/js/typeahead.bundle.min.js{{/linkTo}}"></script>
+<script src="{{#linkTo}}/js/mousetrap.min.js{{/linkTo}}"></script>
+<script src="{{#linkTo}}/js/start.js{{/linkTo}}"></script>
+<script src="{{#linkTo}}/js/start2.js{{/linkTo}}"></script>
+</body>
+</html>

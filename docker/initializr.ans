@@ -1,0 +1,62 @@
+- hosts: localhost
+  vars:
+    version: 1.0.0
+
+  tasks:
+
+    - name: install maven root
+      command: mvn install -DskipTests=true
+      args:
+        chdir: "{{ playbook_dir }}/../.."
+
+    - name: install maven deps
+      command: mvn install -DskipTests=true
+      args:
+        chdir: "{{ playbook_dir }}/../../initializr-service"
+
+    - name: package maven project
+      command: mvn package -DskipTests=true
+      args:
+        chdir: "{{ playbook_dir }}/.."
+
+    - name: build docker image
+      command: docker build -t dockerhub.msplat.io/platform/initializr:{{ version }} -f ./docker/Dockerfile .
+      args:
+        chdir: "{{ playbook_dir }}/.."
+
+    - name: push image 
+      command: docker push dockerhub.msplat.io/platform/initializr:{{ version }}
+
+- hosts: test25
+  vars:
+    version: 1.0.0
+    templates:
+      - application.yml
+      - initializr.stack
+
+  tasks:
+    - name: remove stack initializr if exists
+      shell: "docker stack ls | grep initializr | awk '{ print $1 }' | xargs -r docker stack rm"
+
+    - name: ensure parent folder exists
+      file:
+        path: ~/{{ item }}
+        state: directory
+      loop:
+        - platdock
+
+    - name: sync folder 
+      synchronize:
+        src: ./
+        dest: ~/platdock/initializr/
+        recursive: yes
+        rsync_opts: "{{ templates|map('regex_replace', '^(.*)$', '--exclude=\\1')|list}}"
+
+    - name: do template
+      template:
+        src: "{{ item }}"
+        dest: ~/platdock/initializr/{{ item }}
+      loop: "{{ templates }}"
+
+    - name: deploy stack initializr
+      command: docker stack deploy -c ~/platdock/initializr/initializr.stack initializr

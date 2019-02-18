@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+    initializr:
+        image: dockerproxy.msplat.io/platform/initializr:{{ version }}
+        networks:
+            - webnet
+        configs:
+            - target: /app/application.yml
+              source: initializr-config
+        deploy:
+            replicas: 1
+            labels:
+                traefik.enable: "true"
+                traefik.docker.network: webnet
+                traefik.port: 8080
+                traefik.frontend.entryPoints: http,https
+                traefik.frontend.rule: Host:initializr.msplat.io
+
+networks:
+    webnet:
+        driver: overlay
+        external: true
+
+configs:
+    initializr-config:
+        name: initializr-config-{{ version }}
+        file: ./application.yml
