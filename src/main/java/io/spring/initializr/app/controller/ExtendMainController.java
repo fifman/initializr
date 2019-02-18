@@ -34,9 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 
 import java.io.File;
@@ -45,6 +43,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ExtendMainController extends MainController {
@@ -77,6 +76,15 @@ public class ExtendMainController extends MainController {
 		}
 	}
 
+	@ModelAttribute
+	public ExtendProjectRequest extendProjectRequest(
+			@RequestHeader Map<String, String> headers) {
+		ExtendProjectRequest request = new ExtendProjectRequest();
+		request.getParameters().putAll(headers);
+		request.initialize(this.metadataProvider.get());
+		return request;
+	}
+
 	@GetMapping(path = "/ui/archetypes", produces = "application/json")
     @ResponseBody
 	public List<Archetype> archetypes() {
@@ -87,8 +95,6 @@ public class ExtendMainController extends MainController {
 	@ResponseBody
 	public ResponseEntity<byte[]> springZip(ExtendProjectRequest request)
 			throws IOException {
-		if (request.getVersion() == null)
-			request.setVersion("0.0.1-SNAPSHOT");
 		File dir = this.projectGenerator.generateProjectStructure(request);
 
 		File download = this.projectGenerator.createDistributionFile(dir, ".zip");
