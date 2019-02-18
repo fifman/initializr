@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
@@ -42,6 +43,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +88,17 @@ public class ExtendMainController extends MainController {
 		return request;
 	}
 
+	private void setDepsFromArchs(ExtendProjectRequest request) {
+		if (CollectionUtils.isEmpty(request.getDependencies()))
+			if (CollectionUtils.isEmpty(request.getArchetypes()))
+				return;
+		for (String id: request.getArchetypes()) {
+			Archetype archetype = archetypeRepository.getArchetypeConfig().getArchetype(id);
+			request.getDependencies().addAll(Arrays.asList(archetype.getDependencies()));
+		}
+
+	}
+
 	@GetMapping(path = "/ui/archetypes", produces = "application/json")
     @ResponseBody
 	public List<Archetype> archetypes() {
@@ -95,8 +109,8 @@ public class ExtendMainController extends MainController {
 	@ResponseBody
 	public ResponseEntity<byte[]> springZip(ExtendProjectRequest request)
 			throws IOException {
+		setDepsFromArchs(request);
 		File dir = this.projectGenerator.generateProjectStructure(request);
-
 		File download = this.projectGenerator.createDistributionFile(dir, ".zip");
 
 		String wrapperScript = getWrapperScript(request);

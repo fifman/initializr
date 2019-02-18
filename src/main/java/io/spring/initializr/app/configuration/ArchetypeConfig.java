@@ -2,6 +2,9 @@ package io.spring.initializr.app.configuration;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.spring.initializr.app.model.Archetype;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +27,16 @@ public class ArchetypeConfig {
 
     public void setArchetypePropertiesMap(Map<String, Map<String, Object>> archetypePropertiesMap) {
         this.archetypePropertiesMap = archetypePropertiesMap;
+    }
+
+    public Archetype getArchetype(String id) {
+        if (!CollectionUtils.isEmpty(this.archetypes))
+            for (Archetype archetype: this.archetypes) {
+                if (ObjectUtils.nullSafeEquals(id, archetype.getId())) {
+                    return archetype;
+                }
+            }
+        return null;
     }
 
     public Map<String, Map<String, Object>> getArchetypePropertiesMap() {

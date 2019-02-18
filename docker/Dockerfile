@@ -3,5 +3,5 @@ FROM dockerproxy.msplat.io/openjdk:8
 WORKDIR /app
 # VOLUME ["/var/log/"]
 EXPOSE 8080
-ADD ./target/initializr-app.jar /app/initializr.jar
+ADD ./build/libs/initializr.jar /app/initializr.jar
 CMD ["sh", "-c", "java -jar /app/initializr.jar"]

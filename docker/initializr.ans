@@ -4,18 +4,8 @@
 
   tasks:
 
-    - name: install maven root
-      command: mvn install -DskipTests=true
-      args:
-        chdir: "{{ playbook_dir }}/../.."
-
-    - name: install maven deps
-      command: mvn install -DskipTests=true
-      args:
-        chdir: "{{ playbook_dir }}/../../initializr-service"
-
-    - name: package maven project
-      command: mvn package -DskipTests=true
+    - name: build
+      command: gradle clean build -x test
       args:
         chdir: "{{ playbook_dir }}/.."
 
