@@ -8,14 +8,7 @@ import java.util.List;
 
 public class ExtendDependencyGroup extends DependencyGroup {
 
-    List<Dependency> content = new ArrayList<>();
-
-    @Override
-    public List<Dependency> getContent() {
-        return content;
-    }
-
     public void setContent(List<Dependency> content) {
-        this.content = content;
+        this.getContent().addAll(content);
     }
 }

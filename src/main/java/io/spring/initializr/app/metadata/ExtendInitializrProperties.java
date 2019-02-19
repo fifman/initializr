@@ -5,9 +5,13 @@ import io.spring.initializr.metadata.*;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExtendInitializrProperties extends InitializrConfiguration {
+
+	private Map<String, Repository> repositories = new LinkedHashMap<>();
 
 	/**
 	 * Dependencies, organized in groups (i.e. themes).
@@ -81,6 +85,14 @@ public class ExtendInitializrProperties extends InitializrConfiguration {
 	 */
 	@JsonIgnore
 	private SimpleElement packageName = new SimpleElement(null);
+
+	public Map<String, Repository> getRepositories() {
+		return repositories;
+	}
+
+	public void setRepositories(Map<String, Repository> repositories) {
+		this.repositories = repositories;
+	}
 
 	public List<ExtendDependencyGroup> getDependencies() {
 		return this.dependencies;

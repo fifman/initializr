@@ -23,5 +23,6 @@ public class ArchetypeInitializrMetadataCustomizer implements InitializrMetadata
         metadata.getLanguages().merge(initializrProperties.getLanguages());
         metadata.getPackagings().merge(initializrProperties.getPackagings());
         metadata.getTypes().merge(initializrProperties.getTypes());
+        metadata.getConfiguration().getEnv().getRepositories().putAll(initializrProperties.getRepositories());
     }
 }
